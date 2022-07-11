@@ -82,7 +82,8 @@ export const crudOptions = (vm) => {
         title: '账号',
         key: 'screen_name',
         search: {
-          disabled: false
+          disabled: false,
+          width: 250
         },
         minWidth: 100,
         type: 'input',
