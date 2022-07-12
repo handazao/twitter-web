@@ -30,7 +30,7 @@ import { crudOptions } from './crud'
 import { d2CrudPlus } from 'd2-crud-plus'
 
 export default {
-  name: 'tweet',
+  name: 'myTweet',
   mixins: [d2CrudPlus.crud],
   methods: {
     getCrudOptions () {

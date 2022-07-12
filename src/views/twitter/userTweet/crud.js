@@ -41,44 +41,7 @@ export const crudOptions = (vm) => {
     },
     columns: [
       {
-        title: '推文ID',
-        key: 'since_id',
-        search: {
-          disabled: false,
-          width: 250
-        },
-        disabled: true,
-        form: {
-          disabled: true,
-          component: {
-            props: {
-              clearable: true
-            },
-            placeholder: '返回大于指定ID的结果'
-          }
-        }
-      },
-      {
-        title: '推文ID',
-        key: 'until_id',
-        disabled: true,
-        search: {
-          disabled: false,
-          width: 250
-        },
-        minWidth: 100,
-        form: {
-          disabled: true,
-          component: {
-            props: {
-              clearable: true
-            },
-            placeholder: '返回小于指定ID的结果'
-          }
-        }
-      },
-      {
-        title: '查询条件',
+        title: '账户ID',
         key: 'query',
         disabled: true,
         search: {
@@ -92,7 +55,7 @@ export const crudOptions = (vm) => {
             props: {
               clearable: true
             },
-            placeholder: '请输入查询条件'
+            placeholder: '请输入账户ID'
           }
         }
       },
@@ -106,12 +69,6 @@ export const crudOptions = (vm) => {
         title: '推文',
         key: 'text',
         type: 'textarea'
-      },
-      {
-        title: '作者',
-        key: 'author_id',
-        width: 200,
-        type: 'input'
       },
       {
         title: '创建时间',

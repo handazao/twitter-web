@@ -9,7 +9,7 @@ export const crudOptions = (vm) => {
       rowKey: true // 必须设置，true or false
     },
     rowHandle: {
-      width: 240,
+      width: 150,
       fixed: 'right',
       view: {
         thin: true,
@@ -73,7 +73,7 @@ export const crudOptions = (vm) => {
       {
         title: 'ID',
         key: 'id',
-        disabled: true,
+        minWidth: 130,
         form: {
           disabled: true
         }
@@ -101,46 +101,31 @@ export const crudOptions = (vm) => {
         key: 'name',
         minWidth: 100,
         type: 'input'
-      },
-      {
-        title: '地址',
-        key: 'location',
-        minWidth: 110,
-        type: 'input'
       }, {
         title: '用户描述',
         key: 'description',
         minWidth: 180,
         type: 'textarea'
-      },
-      {
-        title: '是否认证',
-        key: 'verified',
-        type: 'radio',
-        width: 100,
-        dict: ({
-          data: [{ value: false, label: '否' }, { value: true, label: '是' }]
-        })
       }, {
         title: '粉丝数',
         key: 'followers_count',
-        width: 70
+        width: 100
       }, {
         title: '关注数',
         key: 'friends_count',
-        width: 70,
+        width: 100,
         type: 'input'
       },
       {
         title: '点赞数',
         key: 'favourites_count',
         type: 'input',
-        width: 70
+        width: 100
       },
       {
         title: '发布数',
         key: 'statuses_count',
-        width: 70
+        width: 100
       },
       {
         title: '创建时间',
