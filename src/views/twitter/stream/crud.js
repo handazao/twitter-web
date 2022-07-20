@@ -1,7 +1,7 @@
 export const crudOptions = (vm) => {
   return {
     pageOptions: {
-      compact: true
+      compact: false
     },
     options: {
       height: '100%',
@@ -13,7 +13,8 @@ export const crudOptions = (vm) => {
       fixed: 'right',
       view: {
         thin: true,
-        text: ''
+        text: '',
+        show: false
       },
       edit: {
         thin: true,
@@ -24,8 +25,8 @@ export const crudOptions = (vm) => {
       remove: {
         thin: true,
         text: '',
-        show: false,
-        disabled: true
+        show: true,
+        disabled: false
       }
     },
     viewOptions: {
@@ -41,27 +42,45 @@ export const crudOptions = (vm) => {
     },
     columns: [
       {
-        title: '推文ID',
+        title: '过滤规则',
+        key: 'query',
+        disabled: true,
+        minWidth: 120,
+        type: 'input',
+        form: {
+          component: {
+            props: {
+              clearable: true
+            },
+            placeholder: '请添加过滤规则'
+          }
+        }
+      },
+      {
+        title: 'id',
         key: 'id',
         width: 200,
-        type: 'input'
+        type: 'input',
+        form: {
+          disabled: true
+        }
       },
       {
-        title: '推文',
-        key: 'text',
-        type: 'textarea'
+        title: '文本',
+        key: 'value',
+        type: 'textarea',
+        form: {
+          disabled: true
+        }
       },
       {
-        title: '发布人',
-        key: 'user.screen_name',
-        width: 180,
-        type: 'input'
-      },
-      {
-        title: '创建时间',
-        key: 'created_at',
+        title: '标签',
+        key: 'tag',
         width: 200,
-        type: 'datetime'
+        type: 'input',
+        form: {
+          disabled: true
+        }
       }
     ].concat()
   }
