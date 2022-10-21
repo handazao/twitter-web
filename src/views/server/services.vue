@@ -1,6 +1,6 @@
 <template>
   <d2-container>
-    <d2-crud-x>
+    <div>
       <div slot="header">
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
@@ -146,12 +146,11 @@
           </el-form-item>
         </el-form>
       </el-dialog>
-    </d2-crud-x>
+    </div>
   </d2-container>
 </template>
 
 <script>
-import {queryFieldTemplate} from '@api/fieldTemplate'
 import * as api from './api'
 
 
@@ -195,7 +194,6 @@ export default {
     },
     getServiceList() {
       this.loading = true
-      console.log(11)
       const query={
         limit:10,
         page:1
@@ -218,6 +216,7 @@ export default {
        /* queryFieldTemplate(1).then((res) => {
           this.form = res.data.data
         })*/
+        console.log(121)
         this.title = '新增用户'
         this.open = true
       }

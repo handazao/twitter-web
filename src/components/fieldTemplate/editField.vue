@@ -94,7 +94,7 @@
 
 <script>
 
-import {addFieldTemplate, deleteField, getFieldTemplate, queryOption} from '@/api/fieldTemplate'
+import {addFieldTemplate, deleteField, getFieldTemplate, queryOption} from './fieldTemplate'
 
 export default {
   name: 'editField',

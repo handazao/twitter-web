@@ -58,7 +58,7 @@ const frameIn = [{
       path: 'editField',
       name: 'editField',
       hidden: true,
-      component: () => import('@/components/editField')
+      component: () => import('@/components/fieldTemplate/editField')
     }
   ]
 }]
