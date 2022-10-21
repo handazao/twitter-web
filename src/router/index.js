@@ -16,15 +16,15 @@ import store from '@/store/index'
 import util from '@/libs/util.js'
 // 路由数据
 import routes from './routes'
-import { getMenu, handleAsideMenu, handleRouter, checkRouter } from '@/menu'
+import {checkRouter, getMenu, handleAsideMenu, handleRouter} from '@/menu'
 
 // fix vue-router NavigationDuplicated
 const VueRouterPush = VueRouter.prototype.push
-VueRouter.prototype.push = function push (location) {
+VueRouter.prototype.push = function push(location) {
   return VueRouterPush.call(this, location).catch(err => err)
 }
 const VueRouterReplace = VueRouter.prototype.replace
-VueRouter.prototype.replace = function replace (location) {
+VueRouter.prototype.replace = function replace(location) {
   return VueRouterReplace.call(this, location).catch(err => err)
 }
 
@@ -71,7 +71,7 @@ router.beforeEach(async (to, from, next) => {
         const aside = handleAsideMenu(ret.filter(value => value.visible === true))
         store.commit('d2admin/menu/asideSet', aside) // 设置侧边栏菜单
         store.commit('d2admin/search/init', menu) // 设置搜索
-        next({ path: to.fullPath, replace: true, params: to.params })
+        next({path: to.fullPath, replace: true, params: to.params})
       })
     } else {
       next()
@@ -82,7 +82,7 @@ router.beforeEach(async (to, from, next) => {
       } else if (childrenPath.some((item) => to.path.includes(item))) {
         next()
       } else {
-        next({ name: '404' })
+        next({name: '404'})
       }
     }
   } else {

@@ -52,6 +52,13 @@ const frameIn = [{
       name: 'redirect',
       hidden: true,
       component: _import('system/function/redirect')
+    },
+    // 自定义字段
+    {
+      path: 'editField',
+      name: 'editField',
+      hidden: true,
+      component: () => import('@/components/editField')
     }
   ]
 }]
