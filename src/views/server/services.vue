@@ -15,24 +15,24 @@
                 <template slot-scope="props">
                   <el-form label-position="left" inline class="demo-table-expand">
                     <el-form-item label="到期时间">
-                      <span>{{ props.row.expireTime }}</span>
+                      <span>{{ props.row.expire_time }}</span>
                     </el-form-item>
                     <el-form-item label="付款类型">
-                      <span>{{ props.row.payType }}</span>
+                      <span>{{ props.row.pay_type }}</span>
                     </el-form-item>
                     <el-form-item label="付款金额">
-                      <span>{{ props.row.payAmount }}</span>
+                      <span>{{ props.row.pay_amount }}</span>
                     </el-form-item>
                   </el-form>
                 </template>
               </el-table-column>
-
               <el-table-column prop="name" label="名称"/>
               <el-table-column prop="address" label="地址"/>
               <el-table-column prop="ip" label="IP"/>
               <el-table-column prop="configuration" label="配置"/>
-              <el-table-column prop="userName" label="用户名"/>
-              <el-table-column prop="passWord" label="密码"/>
+              <el-table-column prop="user_name" label="用户名"/>
+              <el-table-column prop="pass_word" label="密码"/>
+
               <el-table-column v-for="item in form.fieldTemplateList" :key="item" :prop="item.field"
                                :label="item.label"/>
 
@@ -67,26 +67,59 @@
         <el-form ref="form" label-width="120px" :rules="rules" :model="form">
           <el-row>
             <el-col :span="12">
-              <el-form-item label="用户名" prop="userName">
-                <el-input v-model="form.userName" placeholder="请输入用户名" style="width: 220px"></el-input>
+              <el-form-item label="名称" prop="name">
+                <el-input v-model="form.name" placeholder="请输入名称" style="width: 220px"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="爱好" prop="pwd">
-                <el-input v-model="form.pwd" placeholder="请输入爱好" style="width: 220px"></el-input>
+              <el-form-item label="地址" prop="address">
+                <el-input v-model="form.address" placeholder="请输入地址" style="width: 220px"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="性别" prop="sex">
-                <el-select v-model="form.sex">
-                  <el-option :value="1" label="男"></el-option>
-                  <el-option :value="0" label="女"></el-option>
+              <el-form-item label="IP" prop="ip">
+                <el-input v-model="form.ip" placeholder="请输入IP" style="width: 220px"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="配置" prop="configuration">
+                <el-input v-model="form.configuration" placeholder="请输入配置" style="width: 220px"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="用户名称" prop="user_name">
+                <el-input v-model="form.user_name" placeholder="请输入用户名称" style="width: 220px"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="密码" prop="pass_word">
+                <el-input v-model="form.pass_word" placeholder="请输入密码" style="width: 220px"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="付款类型" prop="pay_type">
+                <el-select v-model="form.pay_type">
+                  <el-option :value="-1" label="白嫖"></el-option>
+                  <el-option :value="0" label="月付"></el-option>
+                  <el-option :value="1" label="季付"></el-option>
+                  <el-option :value="2" label="半年付"></el-option>
+                  <el-option :value="3" label="年付"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="年龄">
-                <el-input-number v-model="form.age"></el-input-number>
+              <el-form-item label="付款金额" prop="pay_amount">
+                <el-input v-model="form.pay_amount" placeholder="请输入付款金额" style="width: 220px"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="到期时间" prop="expire_time">
+                <el-date-picker
+                  v-model="form.expire_time"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="选择日期时间">
+                </el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>
@@ -167,6 +200,15 @@ export default {
       loading: true,
       serviceList: [],
       form: {
+        name: '',
+        ip: '',
+        address: '',
+        configuration: '',
+        user_name: '',
+        pass_word: '',
+        pay_type: '',
+        pay_amount: '',
+        expire_time: '',
         fieldTemplateList: []
       },
       rules: {
@@ -178,13 +220,6 @@ export default {
   },
 
   methods: {
-    sexFormat(row, col, value) {
-      if (value === 1) {
-        return '男'
-      } else {
-        return '女'
-      }
-    },
     goTree() {
       this.$router.push({path: 'editField'})
     },
@@ -194,29 +229,27 @@ export default {
     },
     getServiceList() {
       this.loading = true
-      const query={
-        limit:10,
-        page:1
+      const query = {
+        limit: 10,
+        page: 1
       }
       api.getServiceList(query).then(res => {
-        console.log(res.data)
-        this.serviceList = res.data
-        this.total = res.total
+        this.serviceList = res.data.data
+        this.total = res.data.total
         this.loading = false
       })
     },
     handleUpdate(row) {
       if (row.id) {
-        /* getInfo(row.id).then(res => {
-           this.form = res.data.data
-           this.title = '修改用户'
-           this.open = true
-         }) */
+        api.getInfo(row.id).then(res => {
+          this.form = res.data
+          this.title = '修改用户'
+          this.open = true
+        })
       } else {
-       /* queryFieldTemplate(1).then((res) => {
-          this.form = res.data.data
-        })*/
-        console.log(121)
+        /*  queryFieldTemplate(1).then((res) => {
+            this.form = res.data.data
+          })*/
         this.title = '新增用户'
         this.open = true
       }
@@ -224,28 +257,40 @@ export default {
     saveOrUpdata() {
       this.$refs.form.validate(valid => {
           if (valid) {
-            /* saveOrUpdate(this.form).then((res) => {
-                  if (res.data.code !== '00000') {
-                    this.$message.error(res.data.msg)
-                    return
-                  }
-                  this.$message.success(res.data.msg)
-                  this.open = false
-                  this.getList()
-                }) */
+            if (this.form.id) {
+              api.updateServices(this.form).then(res => {
+                if (res.code !== 2000) {
+                  this.$message.error(res.msg)
+                  return
+                }
+                this.$message.success(res.msg)
+                this.open = false
+                this.getServiceList()
+              })
+            } else {
+              api.saveServices(this.form).then(res => {
+                if (res.code !== 2000) {
+                  this.$message.error(res.msg)
+                  return
+                }
+                this.$message.success(res.msg)
+                this.open = false
+                this.getServiceList()
+              })
+            }
           }
         }
       )
     },
     handleDelete(row) {
-      this.$confirm('是否确认删除用户编号为"' + row.id + '"的数据项?', '警告', {
+      this.$confirm('是否确认删除编号为"' + row.id + '"的数据项?', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function () {
-        // return delUser(row.id)
+        return api.delServices(row.id)
       }).then(() => {
-        this.getList()
+        this.getServiceList()
         this.$message.success('删除成功')
       })
     }
