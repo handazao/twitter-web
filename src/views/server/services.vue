@@ -221,7 +221,7 @@ export default {
 
   methods: {
     goTree() {
-      this.$router.push({path: 'editField'})
+      this.$router.push({path: 'editField', query: {type: 'server'}})
     },
     cancel() {
       this.open = false

@@ -154,14 +154,13 @@ export default {
     }
   },
   created() {
-    this.type = this.$route.params.type
+    this.type = this.$route.query.type
     this.getList()
   },
   methods: {
     getList() {
       getFieldTemplate(this.type).then((res) => {
-        this.form.fieldTemplateList = res.data.data
-        if (this.form.fieldTemplateList.length <= 0) {
+        if (res.data.data.length <= 0) {
           this.form.fieldTemplateList.push({
             field: '',
             label: '',
@@ -171,6 +170,21 @@ export default {
           })
           this.btnName = '保存'
           this.btnType = 'success'
+        }else{
+          let templates = res.data.data[0].template
+          console.log(templates.length)
+          let jsonArray = JSON.parse(templates);
+          jsonArray.forEach((key) => {
+            this.form.fieldTemplateList.push({
+              field: key.field,
+              label: key.label,
+              type: key.type,
+              required: key.required,
+              del: key.del
+            })
+            console.log(key)
+          })
+          console.log(this.form.fieldTemplateList)
         }
       })
     },
