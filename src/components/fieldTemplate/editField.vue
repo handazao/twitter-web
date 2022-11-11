@@ -94,7 +94,7 @@
 
 <script>
 
-import {addFieldTemplate, deleteField, getFieldTemplate, queryOption} from './fieldTemplate'
+import {addFieldTemplate, updateFieldTemplate, deleteField, getFieldTemplate, queryOption} from './fieldTemplate'
 
 export default {
   name: 'editField',
@@ -134,8 +134,10 @@ export default {
       ],
       type: null,
       form: {
+        id: '',
         fieldTemplateList: [],
         type: null,
+        template: '',
         option: {},
         map: {}
       },
@@ -160,6 +162,7 @@ export default {
   methods: {
     getList() {
       getFieldTemplate(this.type).then((res) => {
+        this.form.fieldTemplateList = []
         if (res.data.data.length <= 0) {
           this.form.fieldTemplateList.push({
             field: '',
@@ -171,8 +174,8 @@ export default {
           this.btnName = '保存'
           this.btnType = 'success'
         }else{
+          this.form.id = res.data.data[0].id
           let templates = res.data.data[0].template
-          console.log(templates.length)
           let jsonArray = JSON.parse(templates);
           jsonArray.forEach((key) => {
             this.form.fieldTemplateList.push({
@@ -182,9 +185,7 @@ export default {
               required: key.required,
               del: key.del
             })
-            console.log(key)
           })
-          console.log(this.form.fieldTemplateList)
         }
       })
     },
@@ -212,12 +213,22 @@ export default {
           }
         }
         this.form.type = this.type
-        addFieldTemplate(this.form).then((res) => {
-          this.$message(res.data.msg)
-          this.btnName = '新增字段'
-          this.btnType = 'primary'
-          this.getList()
-        })
+        this.form.template = JSON.stringify(this.form.fieldTemplateList)
+        if(this.form.id){
+          updateFieldTemplate(this.form).then((res) => {
+            this.$message(res.msg)
+            this.btnName = '新增字段'
+            this.btnType = 'primary'
+            this.getList()
+          })
+        }else{
+          addFieldTemplate(this.form).then((res) => {
+            this.$message(res.msg)
+            this.btnName = '新增字段'
+            this.btnType = 'primary'
+            this.getList()
+          })
+        }
       }
     },
     editOption(field) {

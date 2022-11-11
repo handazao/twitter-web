@@ -13,8 +13,16 @@ export function getFieldTemplate(type) {
 
 export function addFieldTemplate(data) {
   return request({
-    url: urlPrefix + 'addField',
+    url: urlPrefix + 'fieldTemplate/',
     method: 'post',
+    data: data
+  })
+}
+
+export function updateFieldTemplate(data) {
+  return request({
+    url: urlPrefix + 'fieldTemplate/' + data.id + '/',
+    method: 'put',
     data: data
   })
 }

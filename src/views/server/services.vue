@@ -33,14 +33,14 @@
               <el-table-column prop="user_name" label="用户名"/>
               <el-table-column prop="pass_word" label="密码"/>
 
-              <el-table-column v-for="item in form.fieldTemplateList" :key="item" :prop="item.field"
-                               :label="item.label"/>
+              <!--              <el-table-column v-for="item in form.fieldTemplate" :key="item" :prop="item.field"
+                                             :label="item.label"/>-->
 
               <el-table-column align="right">
-                <template slot="header">
-                  <el-table-column v-for="item in form.fieldTemplateList" :key="item" :prop="item.field"
-                                   :label="item.value"/>
-                </template>
+                <!--                <template slot="header">
+                                  <el-table-column v-for="item in form.fieldTemplate" :key="item" :prop="item.field"
+                                                   :label="item.value"/>
+                                </template>-->
                 <template slot-scope="scope">
                   <el-button
                     size="mini"
@@ -185,6 +185,7 @@
 
 <script>
 import * as api from './api'
+import {getFieldTemplate} from '../../components/fieldTemplate/fieldTemplate.js'
 
 
 export default {
@@ -199,6 +200,7 @@ export default {
       total: 0,
       loading: true,
       serviceList: [],
+      templateList: [],
       form: {
         name: '',
         ip: '',
@@ -209,7 +211,7 @@ export default {
         pay_type: '',
         pay_amount: '',
         expire_time: '',
-        fieldTemplateList: []
+        fieldTemplateList: ''
       },
       rules: {
         name: [{
@@ -221,12 +223,13 @@ export default {
 
   methods: {
     goTree() {
-      this.$router.push({path: 'editField', query: {type: 'server'}})
+      this.$router.push({path: 'editField', query: {type: 'services'}})
     },
     cancel() {
       this.open = false
       this.form = {}
     },
+    //列表
     getServiceList() {
       this.loading = true
       const query = {
@@ -239,21 +242,29 @@ export default {
         this.loading = false
       })
     },
+    // 新增页面 or 修改页面
     handleUpdate(row) {
       if (row.id) {
         api.getInfo(row.id).then(res => {
-          this.form = res.data
+          this.form = res.data.services
+          if (res.data.fieldTemplate) {
+            this.form.fieldTemplateList = JSON.parse(res.data.fieldTemplate)
+          }
+          console.log(this.form)
           this.title = '修改用户'
           this.open = true
         })
       } else {
-        /*  queryFieldTemplate(1).then((res) => {
-            this.form = res.data.data
-          })*/
+        getFieldTemplate("services").then((res) => {
+          if(res.data.data){
+            this.form.fieldTemplateList = JSON.parse(res.data.data[0].template)
+          }
+        })
         this.title = '新增用户'
         this.open = true
       }
     },
+    // 新增or修改
     saveOrUpdata() {
       this.$refs.form.validate(valid => {
           if (valid) {
@@ -282,6 +293,7 @@ export default {
         }
       )
     },
+    //删除
     handleDelete(row) {
       this.$confirm('是否确认删除编号为"' + row.id + '"的数据项?', '警告', {
         confirmButtonText: '确定',
