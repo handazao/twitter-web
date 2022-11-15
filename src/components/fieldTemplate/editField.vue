@@ -35,7 +35,7 @@
               <el-button v-show="item.type===5 || item.type===6" type="primary" size="mini"
                          @click="editOption(item.field)">编辑/查看选项
               </el-button>
-              <el-button v-if="!item.del" type="danger" size="mini" @click="deleteField(item.field)">删除</el-button>
+              <el-button v-if="item.del" size="mini" type="danger" @click="deleteField(item.field)">删除</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -234,7 +234,7 @@ export default {
     editOption(field) {
       this.open = true
       this.title = '编辑选项'
-      queryOption(field, this.type).then(res => {
+      queryOption(this.type, field).then(res => {
         this.field = field
         this.form.option = res.data.data
       })
@@ -258,14 +258,12 @@ export default {
             message: '字段名为空无法删除'
           })
         }
-        deleteField(field, this.type).then(() => {
+        deleteField(this.type, field).then(() => {
           this.$message({
             type: 'success',
             message: '删除成功!'
           })
-          getFieldTemplate(this.type).then((res) => {
-            this.form.fieldTemplateList = res.data.data
-          })
+          this.getList()
         })
       }).catch(() => {
         this.$message({
@@ -283,7 +281,6 @@ export default {
                 if (this.form.fieldTemplateList[i].map === null || this.form.fieldTemplateList[i].map === undefined) {
                   this.form.fieldTemplateList[i].map = []
                 }
-                console.log(this.form.fieldTemplateList[i].map.length)
                 for (let j = 0; j < this.form.fieldTemplateList[i].map.length; j++) {
                   if (this.form.fieldTemplateList[i].map[j].label === this.form.map.label) {
                     this.$message.error('存在重复选项名，无法添加')
@@ -299,16 +296,30 @@ export default {
                   value: this.form.map.value
                 })
                 this.form.type = this.type
-                addFieldTemplate(this.form).then(() => {
-                  queryOption(this.field, this.type).then(res => {
-                    this.form.option = res.data.data
+                this.form.template = JSON.stringify(this.form.fieldTemplateList)
+                if(this.form.id){
+                  updateFieldTemplate(this.form).then((res) => {
+                    queryOption(this.type, this.field).then(res => {
+                      this.form.option = res.data.data
+                    })
+                    this.$message.success('保存成功')
+                    this.btnName = '新增字段'
+                    this.btnType = 'primary'
+                    this.form.map.label = ''
+                    this.form.map.value = ''
                   })
-                  this.$message.success('保存成功')
-                  this.btnName = '新增字段'
-                  this.btnType = 'primary'
-                  this.form.map.label = ''
-                  this.form.map.value = ''
-                })
+                }else{
+                  addFieldTemplate(this.form).then(() => {
+                    queryOption(this.type, this.field).then(res => {
+                      this.form.option = res.data.data
+                    })
+                    this.$message.success('保存成功')
+                    this.btnName = '新增字段'
+                    this.btnType = 'primary'
+                    this.form.map.label = ''
+                    this.form.map.value = ''
+                  })
+                }
               }
             }
           }
@@ -328,9 +339,10 @@ export default {
               if (this.form.fieldTemplateList[i].map[j].label === label) {
                 this.form.fieldTemplateList[i].map.splice(j, 1)
                 this.form.type = this.type
-                addFieldTemplate(this.form).then(() => {
+                this.form.template = JSON.stringify(this.form.fieldTemplateList)
+                updateFieldTemplate(this.form).then((res) => {
                   this.$message.success('删除成功')
-                  queryOption(this.field, this.type).then(res => {
+                  queryOption(this.type, this.field).then(res => {
                     this.form.option = res.data.data
                   })
                 })

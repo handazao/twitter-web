@@ -200,7 +200,6 @@ export default {
       total: 0,
       loading: true,
       serviceList: [],
-      templateList: [],
       form: {
         name: '',
         ip: '',
@@ -211,7 +210,7 @@ export default {
         pay_type: '',
         pay_amount: '',
         expire_time: '',
-        fieldTemplateList: ''
+        fieldTemplateList: []
       },
       rules: {
         name: [{
@@ -227,7 +226,16 @@ export default {
     },
     cancel() {
       this.open = false
-      this.form = {}
+      this.form.name = ''
+      this.form.ip = ''
+      this.form.address = ''
+      this.form.configuration = ''
+      this.form.user_name = ''
+      this.form.pass_word = ''
+      this.form.pay_type = ''
+      this.form.pay_amount = ''
+      this.form.expire_time = ''
+      this.form.fieldTemplateList = []
     },
     //列表
     getServiceList() {
@@ -247,10 +255,7 @@ export default {
       if (row.id) {
         api.getInfo(row.id).then(res => {
           this.form = res.data.services
-          if (res.data.fieldTemplate) {
-            this.form.fieldTemplateList = JSON.parse(res.data.fieldTemplate)
-          }
-          console.log(this.form)
+          this.form.fieldTemplateList = JSON.parse(res.data.fieldDate.template)
           this.title = '修改用户'
           this.open = true
         })
@@ -259,9 +264,9 @@ export default {
           if(res.data.data){
             this.form.fieldTemplateList = JSON.parse(res.data.data[0].template)
           }
+          this.title = '新增用户'
+          this.open = true
         })
-        this.title = '新增用户'
-        this.open = true
       }
     },
     // 新增or修改

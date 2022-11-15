@@ -2,15 +2,16 @@ import {request} from '@/api/service'
 
 export const urlPrefix = '/api/fieldTemplate/'
 
-
+// 查询模板
 export function getFieldTemplate(type) {
   return request({
-    url: urlPrefix + 'type/' + type,
+    url: urlPrefix + type,
     method: 'get',
-    data: { type }
+    data: {type}
   })
 }
 
+// 保存模板
 export function addFieldTemplate(data) {
   return request({
     url: urlPrefix + 'fieldTemplate/',
@@ -19,6 +20,7 @@ export function addFieldTemplate(data) {
   })
 }
 
+// 修改模板
 export function updateFieldTemplate(data) {
   return request({
     url: urlPrefix + 'fieldTemplate/' + data.id + '/',
@@ -27,23 +29,18 @@ export function updateFieldTemplate(data) {
   })
 }
 
-export function deleteField(field, type) {
+//删除字段
+export function deleteField(type, field) {
   return request({
-    url: urlPrefix + field + '/' + type,
+    url: urlPrefix + type + '/' + field,
     method: 'delete',
   })
 }
 
-export function queryOption(field, type) {
+// 查询字段
+export function queryOption(type, field) {
   return request({
-    url: urlPrefix + 'option/' + field + '/' + type,
-    method: 'get',
-  })
-}
-
-export function queryFieldTemplate(type) {
-  return request({
-    url: urlPrefix + type,
+    url: urlPrefix + type + '/' + field,
     method: 'get',
   })
 }
